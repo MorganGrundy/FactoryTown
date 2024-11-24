@@ -4,6 +4,7 @@ from collections import deque
 from datetime import datetime
 import math
 from typing import TypeVar
+import ProductionChain_Sorting
 
 #Stores relations (producers and consumers) for a given item in a production line
 class ItemRelations():
@@ -699,10 +700,7 @@ def main():
     productionLines = GetProductionLines(targetItem)
 
     #Sort by number of workers
-    #productionLines.sort(key=lambda x: (x.stats.totalSuppliers[WorkUnits.SUPPLIER.WORKER_TYPE_1] if WorkUnits.SUPPLIER.WORKER_TYPE_1 in x.stats.totalSuppliers else 0) + (x.stats.totalSuppliers[WorkUnits.SUPPLIER.WORKER_TYPE_2] if WorkUnits.SUPPLIER.WORKER_TYPE_2 in x.stats.totalSuppliers else 0))
-
-    #Sort by number of recipes
-    productionLines.sort(key=lambda x: len(x.recipes))
+    productionLines.sort(key=lambda x: (ProductionChain_Sorting.SortByWorkers(x), ProductionChain_Sorting.SortByRequired(x, NATURAL_RESOURCE.iron_ore), ProductionChain_Sorting.SortByBuildings(x)))
 
     WriteValidChains(targetItem, productionLines)
 
